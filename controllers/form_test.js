@@ -1,15 +1,9 @@
 const form_get = async (req, res) => {
-    const {title, data} = req.body
-
-    if(!title|| !data) {
-        throw new badRequest("please data",400);
-    }
-
-    res.status(200).json({msg:'user reated',token});
+    return res.status(200).render('form_post',{"csrfToken":req.csrfToken()});
 }
 
 const form_post = async (req, res) => {
-    
+    return res.status(200).json({"title":req.body.title, "data":req.body.data});
 }
 
 module.exports = {

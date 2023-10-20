@@ -5,8 +5,10 @@ var express = require('express')
 var bodyParser = require('body-parser');
 const ejs = require('ejs');
 const connectDB = require('./db/connect');
+
 const homePage = require('./routes/home');
-const testPage = require('./routes/test')
+const formPage = require('./routes/form_router')
+const dbPage = require('./routes/db_router')
 
 const app = express();
 const server = http.createServer(app);
@@ -18,10 +20,12 @@ app.set('views', './views');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.json());
+
+
 //routers
 app.use('/', homePage);
-app.use('/', testPage);
-
+app.use('/form', formPage);
+app.use('/db', dbPage);
 
 const port = process.env.PORT || 3000;
 
