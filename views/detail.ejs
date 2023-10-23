@@ -7,16 +7,22 @@
 <body>
     title: <%=data.title%><br>
     data: <%=data.data%><br>
-    <a href = "/db">list</a><br>
 
-    <form method = "DELETE">
-        <input type="submit">
-    </form>
-
-    <form method = "POST">
+    <p>-------------------------------------------</p>
+    <p> data update </p>
+    <p>-------------------------------------------</p>
+    <form method = "POST", action = "/db/update/<%=data.id%>">
         <p>제목 : <input type="text" name = "title" value = "test title"></p>
         <p>내용 : <input type="text" name = "data" value = "test data"> </p>
-        <input type="submit">
+        <input type="submit", value = "update">
     </form>
+
+    <p>-------------------------------------------</p>
+    <form method = "POST", action = "/db/delete/<%=data.id%>">
+        <input type = "submit", value = "DELETE">
+    </form>
+
+    
+    <a href = "/db">list back</a><br>
 </body>
 </html> 
