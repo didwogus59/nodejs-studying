@@ -1,17 +1,21 @@
 require('dotenv').config();
-const http = require('http');
 var cookieParser = require('cookie-parser')
 var express = require('express')
 var bodyParser = require('body-parser');
 const ejs = require('ejs');
 const connectDB = require('./db/connect');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
+const authorization = require("./middleware/auth")
+
 
 const homePage = require('./routes/home');
 const formPage = require('./routes/form_router')
 const dbPage = require('./routes/db_router')
+const user_route = require('./routes/user_router'); 
+
 
 const app = express();
-const server = http.createServer(app);
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -23,9 +27,11 @@ app.use(express.json());
 
 
 //routers
-app.use('/', homePage);
+app.use('/', authorization, homePage);
 app.use('/form', formPage);
 app.use('/db', dbPage);
+app.use('/user',csrfProtection,user_route);
+
 
 const port = process.env.PORT || 3000;
 

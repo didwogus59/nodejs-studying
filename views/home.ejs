@@ -2,15 +2,23 @@
 <html lang="ko">
     <head>
         <meta charset="utf-8">
-        <title>studying nodejs</title>
+        <title>homepage</title>
     </head>
+    <p>-------------------------------------------</p>
+        <%if(typeof name != 'undefined') {%>
+            <%=name%><br>
+        <%} else {%>
+            no user
+        <%}%>
+    
+    <p>-------------------------------------------</p>  
     <body>
-        <a href="/db" class="btn btn-primary">db get</a><br>
+        <a href="/db" class="btn btn-primary">db get post</a><br>
         <a href="/form" class="btn btn-primary">form get post</a><br>
         <a href="/form/csrf" class = "btn btn-primary">csrf test page</a><br>
-        <a href="" class="btn btn-primary">json get post</a><br>
-        <a href="" class = "btn btn-primary">login test page</a><br>
-        <a href="" class = "btn btn-primary">sign test page</a><br>
+        <a href="/user/sign" class = "btn btn-primary">sign test page</a><br>
+        <a href="/user/login" class = "btn btn-primary">session login test page</a><br>
+        <a href="" class = "btn btn-primary">jwt login test page</a><br>
         <a href="" class = "btn btn-primary">board test page</a><br>
         <a href="" class = "btn btn-primary">chat test</a><br>
     </body>
