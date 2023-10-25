@@ -3,20 +3,16 @@ const {unAthentication} = require('../errors');
 
 
 const authenticationMiddleware = async (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if(typeof authHeader == "undefined") {
+    const token = req.cookies.jwt;
+    if(typeof token == "undefined") {
         console.log("no token")
         return next();
     }
-    if(!authHeader.startsWith('Bearer ')) {
-        return next();
-    }
-    const token = authHeader.split(' ')[1];
-
     try {
         const decoded = jwt.verify(token,process.env.JWT_SECRET)
-        const {name} = decoded
-        req.user = {name};
+        const {name, id} = decoded
+        req.name = name;
+        req.id = id;
         return next();
 
     } catch (err) {

@@ -1,6 +1,8 @@
 const Users = require("../models/user");
 const crypto = require("crypto-js");
 const jwt = require("jsonwebtoken")
+const session = require('express-session')
+
 const signPage = (req, res) => {
     return res.status(200).render('sign',{"csrfToken":req.csrfToken()});
 }
@@ -19,17 +21,43 @@ const signUser = async(req, res) => {
     return signPage(req,res);
 }
 
-const loginUser = async(req, res) => {
+const loginUser_jwt = async(req, res) => {
+    if(req.cookies.jwt) {
+        console.log("token exist");
+        return loginPage(req,res);
+    }
+
     const user = await Users.findOne({name : req.body.name});
     const password = req.body.password;
     const hashPassword = crypto.SHA256(password).toString();
-    console.log(user.password);
-    console.log(hashPassword);
+    
     if(user.password === hashPassword) {
-        const token = jwt.sign({user},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME});
-        return res.cookie("jwt",token).status(200).render('home');
+        const token = jwt.sign({id:user.id,name:user.name},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME});
+        return res.cookie("jwt",token).status(200).redirect("/");
     }
     return loginPage(req,res);
 }
 
-module.exports = {signUser, loginUser, signPage, loginPage};
+const loginUser_session = async(req, res, next) => {
+    if(req.session.user) {
+        console.log("session exist");
+        return loginPage(req,res);
+    }
+    const user = await Users.findOne({name : req.body.name});
+    const password = req.body.password;
+    const hashPassword = crypto.SHA256(password).toString();
+
+    if(user.password === hashPassword) {
+        req.session.user = {
+            name: user.name,
+            id: user._id,
+        }
+        console.log(req.session)
+        req.session.save(err => console.log(err));
+        return res.status(200).redirect("/");
+    }
+    return res.redirect("/user/session");
+}
+
+module.exports = {signUser, loginUser_jwt, loginUser_session, signPage, loginPage};
+
