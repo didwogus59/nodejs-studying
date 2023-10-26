@@ -13,8 +13,8 @@ const MongoStore = require('connect-mongo');
 const homePage = require('./routes/home');
 const formPage = require('./routes/form_router')
 const dbPage = require('./routes/db_router')
-const user_route = require('./routes/user_router'); 
-
+const userPage = require('./routes/user_router'); 
+const boardPage = require('./routes/board_router')
 
 const app = express();
 
@@ -44,11 +44,12 @@ app.use(express.json());
 
 
 //routers
-app.use('/', authorization, homePage);
 app.use('/form', formPage);
 app.use('/db', dbPage);
-app.use('/user',csrfProtection,user_route);
+app.use('/user',csrfProtection,userPage);
+app.use('/board',authorization, boardPage)
 
+app.use('/', authorization, homePage);
 
 
 const port = process.env.PORT || 3000;

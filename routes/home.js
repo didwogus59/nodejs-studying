@@ -3,16 +3,14 @@ const express = require('express')
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-    console.log(req.session.user)
-    console.log(req.name)
-    if(req.session.user) {
-      return res.status(200).render('home', {name:req.session.user.name, login:"session"});
-    }
-    if(req.name) {
-      return  res.status(200).render('home', {name:req.name, login: "JWT"});
-    }
+  if(req.session.user) {
+    return res.status(200).render('home', {user: req.session.user, login:"session"});
+  }
+  if(req.user) {
+    return  res.status(200).render('home', {user: req.user, login: "JWT"});
+  }
     
-    return  res.status(200).render('home');
+  return  res.status(200).render('home');
 });
 
 router.get('/test', function(req, res, next) {

@@ -5,8 +5,8 @@
         <title>homepage</title>
     </head>
     <p>-------------------------------------------</p>
-        <%if(typeof name != 'undefined') {%>
-            <%=name%><br>
+        <%if(typeof user != 'undefined') {%>
+            <%=user.name%><br>
             <%=login%><br>
             <a href="/user/logout/<%=login%>" class="btn btn-primary">logout</a><br>
         <%} else {%>
@@ -21,7 +21,7 @@
         <a href="/user/sign" class = "btn btn-primary">sign test page</a><br>
         <a href="/user/login" class = "btn btn-primary">jwt login test page</a><br>
         <a href="/user/login/session" class = "btn btn-primary">session login test page</a><br>
-        <a href="" class = "btn btn-primary">board test page</a><br>
+        <a href="/board" class = "btn btn-primary">board test page</a><br>
         <a href="" class = "btn btn-primary">chat test</a><br>
     </body>
 </html> 

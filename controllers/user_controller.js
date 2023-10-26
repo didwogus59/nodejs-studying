@@ -30,9 +30,8 @@ const loginUser_jwt = async(req, res) => {
     const user = await Users.findOne({name : req.body.name});
     const password = req.body.password;
     const hashPassword = crypto.SHA256(password).toString();
-    
     if(user.password === hashPassword) {
-        const token = jwt.sign({id:user.id,name:user.name},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME});
+        const token = jwt.sign({user: {id:user.id,name:user.name}},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME});
         return res.cookie("jwt",token,{ maxAge: 3600000 }).status(200).redirect("/");
     }
     return loginPage(req,res);

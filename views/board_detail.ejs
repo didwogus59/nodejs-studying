@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>data detail</title>
+</head>
+<body>
+    title: <%=data.title%><br>
+    data: <%=data.data%><br>
+    <p>-------------------------------------------</p>
+    <% if(typeof user != "undefined") { %>
+        <% if(user.id == data.user_id) { %>
+            <p> data update </p>
+            <p>-------------------------------------------</p>
+            <form method = "POST", action = "/board/update/<%=data.id%>">
+                <p>제목 : <input type="text" name = "title" value = <%=data.title%>></p>
+                <p>내용 : <input type="text" name = "data" value = <%=data.data%>> </p>
+                <input type="submit", value = "update">
+            </form>
+            <p>-------------------------------------------</p>
+
+            <form method = "POST", action = "/board/delete/<%=data.id%>">
+                <input type = "submit", value = "DELETE">
+            </form>
+        <%}%>
+    <%}%>
+    
+    <a href = "/board">list back</a><br>
+</body>
+</html> 
