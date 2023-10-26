@@ -33,7 +33,7 @@ const loginUser_jwt = async(req, res) => {
     
     if(user.password === hashPassword) {
         const token = jwt.sign({id:user.id,name:user.name},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME});
-        return res.cookie("jwt",token).status(200).redirect("/");
+        return res.cookie("jwt",token,{ maxAge: 3600000 }).status(200).redirect("/");
     }
     return loginPage(req,res);
 }
@@ -41,6 +41,7 @@ const loginUser_jwt = async(req, res) => {
 const loginUser_session = async(req, res, next) => {
     if(req.session.user) {
         console.log("session exist");
+        console.log(req.session.user)
         return loginPage(req,res);
     }
     const user = await Users.findOne({name : req.body.name});
@@ -52,12 +53,20 @@ const loginUser_session = async(req, res, next) => {
             name: user.name,
             id: user._id,
         }
-        console.log(req.session)
-        req.session.save(err => console.log(err));
         return res.status(200).redirect("/");
     }
     return res.redirect("/user/session");
 }
 
-module.exports = {signUser, loginUser_jwt, loginUser_session, signPage, loginPage};
+const logout_jwt = (req, res) => {
+    res.clearCookie('jwt');
+    return res.status(200).redirect("/");
+}
+
+
+const logout_session = (req, res) => {
+    req.session.destroy();
+    return res.status(200).redirect("/");
+}
+module.exports = {signUser, loginUser_jwt, loginUser_session, signPage, loginPage, logout_jwt, logout_session};
 
