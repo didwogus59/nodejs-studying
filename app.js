@@ -10,13 +10,22 @@ const authorization = require("./middleware/auth")
 const session = require("express-session")
 const MongoStore = require('connect-mongo');
 
+
 const homePage = require('./routes/home');
 const formPage = require('./routes/form_router')
 const dbPage = require('./routes/db_router')
 const userPage = require('./routes/user_router'); 
 const boardPage = require('./routes/board_router')
+const websocketPage = require('./routes/websocket_router')
+
 
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+const {orderHandler} = require('./controllers/websocket_controller')
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -48,8 +57,18 @@ app.use('/form', formPage);
 app.use('/db', dbPage);
 app.use('/user',csrfProtection,userPage);
 app.use('/board',authorization, boardPage)
-
+app.use('/websocket', websocketPage);
 app.use('/', authorization, homePage);
+
+
+const onConnection = (socket) => {
+  orderHandler(io, socket);
+}
+io.on('connection', onConnection);
+
+
+
+
 
 
 const port = process.env.PORT || 3000;
@@ -57,7 +76,7 @@ const port = process.env.PORT || 3000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI)
-    app.listen(port, () =>
+    server.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
   } catch (error) {
