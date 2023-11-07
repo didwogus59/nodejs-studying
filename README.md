@@ -4,7 +4,7 @@ form parsing
 
 csrf token
 
-jwt token
+jwt
 
 session
 
